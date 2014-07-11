@@ -76,7 +76,7 @@ def voltsToTempCoeffs(mVolts):
     into temperature in Celsius.
     """
     if mVolts < -5.603 or mVolts > 20.872:
-        raise Exception("Voltage outside range.")
+        print "Voltage outside range."
     if mVolts < 0:
         return voltsToTempCoefficients1 
     else: 
@@ -89,7 +89,7 @@ def tempToVoltsCoeffs(tempC):
     into voltage in millivolts.
     """
     if tempC < -270 or tempC > 400:
-        raise Exception("Temperature outside range.")
+        print "Temperature outside range."
     if tempC < 0:
         return tempToVoltsCoefficients1
     else:
@@ -116,14 +116,10 @@ def tempCtoMVolts(tempC):
     coeffs = tempToVoltsCoeffs(tempC)
     return computePolynomial(coeffs, tempC)
 
-def convertVoltsArrayToTempsArray(cjcTempC, voltsArray):
+def convertVoltsToTemp(cjcTempC, voltsMeasured):
     """
     cjcTempC = cold junction temperature in Celsius
-    voltsArray = array of voltages in Volts
+    voltsMeasured = voltage measured in Volts
     """
     cjcMVolts = tempCtoMVolts(cjcTempC) #Convert cold junction temp to mV
-    voltsArrayIter = range(len(voltsArray))
-    tempArray = [0]*len(voltsArray)
-    for i in voltsArrayIter:
-        tempArray[i] = mVoltstoTempC(voltsArray[i]*1000 + cjcMVolts) #multiply by 1000 to convert to mV
-    return tempArray
+    return mVoltstoTempC(voltsMeasured*1000 + cjcMVolts) #multiply by 1000 to convert to mV
