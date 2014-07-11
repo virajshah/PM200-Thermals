@@ -130,7 +130,7 @@ class ConvertLogGraph(threading.Thread):
             except Queue.Empty:
                 continue
 
-            #Convert voltage array recieved from queue to temperature array
+            #Convert voltage array recieved from queue to converted array
             latestConvertedValues = self.convert(latestAinValues)
             
             #Running timestamp of data based on Scan Frequency and loop iteration
