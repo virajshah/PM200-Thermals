@@ -1,0 +1,4 @@
+http://stackoverflow.com/questions/4129697/how-do-i-display-real-time-graphs-in-a-simple-ui-for-a-python-program
+http://stackoverflow.com/questions/3835109/handling-frame-resize-in-matplotlib-animation-with-wxagg-backend
+http://graphite.wikidot.com
+http://www.swharden.com/blog/2013-05-08-realtime-data-plotting-in-python/
