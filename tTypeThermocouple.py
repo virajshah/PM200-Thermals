@@ -77,8 +77,8 @@ def voltsToTempCoeffs(mVolts):
     set of coefficients that will be used for conversion
     into temperature in Celsius.
     """
-    #if mVolts < -5.603 or mVolts > 20.872:
-        #print "Voltage outside range."
+    if mVolts < -5.603 or mVolts > 20.872:
+        print "Voltage outside range."
     if mVolts < 0:
         return voltsToTempCoefficients1 
     else: 
@@ -90,8 +90,8 @@ def tempToVoltsCoeffs(tempC):
     set of coefficients that will be used for conversion
     into voltage in millivolts.
     """
-    #if tempC < -270 or tempC > 400:
-        #print "Temperature outside range."
+    if tempC < -270 or tempC > 400:
+        print "Temperature outside range."
     if tempC < 0:
         return tempToVoltsCoefficients1
     else:
