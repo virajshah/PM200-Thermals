@@ -179,7 +179,7 @@ def main():
     #Define acquisition parameters
     channelList = range(30)
     resolutionIndexList = [1]*30
-    gainIndexList = [3]*30; gainIndexList[14] = 0
+    gainIndexList = [2]*30; gainIndexList[14] = 0
     settlingFactor = 0
     differentialList = [False]*30
     thermocoupleList = [True]*30; thermocoupleList[14]=False
