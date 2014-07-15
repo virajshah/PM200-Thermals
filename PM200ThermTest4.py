@@ -138,7 +138,7 @@ class ConvertLogGraph(threading.Thread):
 
             #Log temperature data into a CSV file
             with open('test.csv','ab') as f:
-                wr = csv.writer(f, quoting=csv.QUOTE_ALL)
+                wr = csv.writer(f)
                 wr.writerow([timestamp]+latestConvertedValues)
 
             self.timeCounter += 1
