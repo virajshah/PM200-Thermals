@@ -6,6 +6,7 @@ from time import sleep, time
 import Queue
 import csv
 import tTypeThermocouple
+import thermistorOmega4404
 
 """
 Notes for future improvements, things needed, etc. 
