@@ -191,6 +191,8 @@ def main():
     ljCJCTempSlope = -92.379000000000005 #d.calInfo.temperatureSlope
     """==========User Input End=========="""
 
+    assert len(channelList) == len(resolutionIndexList) == len(gainIndexList) == len(differentialList) == len(thermocoupleList), "Length of input lists are not all the same."
+
     #Build up list of measurements to be passed to worker threads.
     listOfMeasurements = [0]*len(channelList)
     for i in range(len(channelList)):
