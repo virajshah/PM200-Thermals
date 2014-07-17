@@ -13,7 +13,9 @@ def voltsToTemp(measuredV, supplyV, pullupR):
 	C = 1.007E-7
 
 	thermistorR = pullupR/((float(supplyV)/measuredV) - 1) #Voltage divider formula
+	try:
+		inverseT = A + B*log(thermistorR) + C*(log(thermistorR)**3)
+	except:
+		inverseT = 1
 
-	inverseT = A + B*log(thermistorR) + C*(log(thermistorR)**3)
-
-	return (1/inverseT)-273.15
+	return (float(1)/inverseT)-273.15
