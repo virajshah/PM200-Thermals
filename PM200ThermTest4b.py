@@ -25,7 +25,7 @@ class Measurement():
     """
     Object to contain information of one measurement to LabJack.
     """
-    def __init__(self, channelName, channelNum, resolutionIndex, gainIndex, settlingFactor, differential, thermocouple):
+    def __init__(self, channelName, channelNum, resolutionIndex, gainIndex, settlingFactor, differential, thermocouple, digital):
         self.channelName = channelName
         self.channelNum = channelNum
         self.resolutionIndex = resolutionIndex
@@ -33,6 +33,7 @@ class Measurement():
         self.settlingFactor = settlingFactor
         self.differential = differential
         self.thermocouple = thermocouple
+        self.digital = digital
 
         self.getParams = {"name": self.channelName,
                             "channel": self.channelNum,
@@ -47,6 +48,9 @@ class Measurement():
 
     def isThermocouple(self):
         return self.thermocouple
+
+    def isDigital(self):
+        return self.digital
 
 
 class LabJackIO(threading.Thread):
@@ -70,10 +74,19 @@ class LabJackIO(threading.Thread):
         feedbackArguments = [0]*numOfMeasurements
         latestValues = [0]*numOfMeasurements
 
+        for measurement in self.listOfMeasurements:
+            if measurement.isDigital():
+                d.configIO( NumberTimersEnabled = 1 )
+                d.configTimerClock( TimerClockBase = 2) #48 MHz
+                d.getFeedback(u6.Timer0Config(TimerMode = 2, Value = 0)) #Set the Timer mode to 2. 32-bit rising edge Timer. 
+
         #Create Feedback Argument List
         for i in range(numOfMeasurements):
             ithMeasurement = self.listOfMeasurements[i]
-            feedbackArguments[i] = ( u6.AIN24(ithMeasurement.GET("channel"), 
+            if ithMeasurement.isDigital():
+                feedbackArguments[i] = u6.Timer(timer = 0, UpdateReset = True, Value = 0, Mode = 2)
+            else:    
+                feedbackArguments[i] = ( u6.AIN24(ithMeasurement.GET("channel"), 
                                                 ithMeasurement.GET("resolution"), 
                                                 ithMeasurement.GET("gain"), 
                                                 ithMeasurement.GET("settlingFactor"), 
@@ -97,7 +110,11 @@ class LabJackIO(threading.Thread):
             #Convert binary values into analog voltages
             for i in range(numOfMeasurements):
                 ithMeasurement = self.listOfMeasurements[i]
-                latestValues[i] = d.binaryToCalibratedAnalogVoltage(ithMeasurement.GET("gain"), feedbackResult[i], resolutionIndex = ithMeasurement.GET("resolution"))
+                #If measurement is digital leave the value alone. If analog, convert binary to voltage. 
+                if ithMeasurement.isDigital():
+                    latestValues[i] = feedbackResult[i]
+                else:
+                    latestValues[i] = d.binaryToCalibratedAnalogVoltage(ithMeasurement.GET("gain"), feedbackResult[i], resolutionIndex = ithMeasurement.GET("resolution"))
 
             #Put in queue for other thread to process. 
             global q
@@ -189,11 +206,12 @@ def main():
     #Define acquisition parameters
     channelNameList = ['Viraj%s' %i for i in range(30)]
     channelList = range(30)
-    resolutionIndexList = [1]*30
+    resolutionIndexList = [1]*len(channelList)
     gainIndexList = [2]*30; gainIndexList[14] = 0
     settlingFactor = 0
     differentialList = [False]*30
-    thermocoupleList = [True]*30; thermocoupleList[14]=False
+    thermocoupleList = [True]*30; thermocoupleList[14]=False; thermocoupleList[-1] = False
+    digitalList = [False]*30; digitalList[-1] = True
     
     scanFrequency = 10
 
@@ -202,7 +220,7 @@ def main():
     ljCJCTempSlope = -92.379000000000005 #d.calInfo.temperatureSlope
     """==========User Input End=========="""
 
-    assert len(channelNameList) == len(channelList) == len(resolutionIndexList) == len(gainIndexList) == len(differentialList) == len(thermocoupleList), "Length of input lists are not all the same."
+    assert len(channelNameList) == len(channelList) == len(resolutionIndexList) == len(gainIndexList) == len(differentialList) == len(thermocoupleList) == len(digitalList), "Length of input lists are not all the same."
 
     #Build up list of measurements to be passed to worker threads.
     listOfMeasurements = [0]*len(channelList)
@@ -213,7 +231,8 @@ def main():
                                             gainIndex = gainIndexList[i], 
                                             settlingFactor = settlingFactor, 
                                             differential = differentialList[i], 
-                                            thermocouple = thermocoupleList[i])
+                                            thermocouple = thermocoupleList[i],
+                                            digital = digitalList[i])
 
     #Set up queue to be shared between threads
     global q
