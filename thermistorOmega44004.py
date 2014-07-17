@@ -2,6 +2,8 @@
 #Using datasheet: http://www.omega.com/Temperature/pdf/44000_THERMIS_ELEMENTS.pdf
 #This is using a pullup resistor.
 
+#Returns T in Celsius.
+
 from math import log #imports natural log (a.k.a. ln)
 
 def voltsToTemp(measuredV, supplyV, pullupR):
@@ -14,4 +16,4 @@ def voltsToTemp(measuredV, supplyV, pullupR):
 
 	inverseT = A + B*log(thermistorR) + C*(log(thermistorR)**3)
 
-	return 1/inverseT
+	return (1/inverseT)-273.15
