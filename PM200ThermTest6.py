@@ -201,7 +201,7 @@ class ConvertLogGraph(threading.Thread):
                 self.convertedValues[i] = ljCJCTempC
             elif i == 0 or i ==1:
                 #Returns T in Celsius
-                self.convertedValues[i] = thermistorNxpKTY84.voltsToTemp(latestValues[i], 5, 100) #measuredV, supplyV, pullupR
+                self.convertedValues[i] = thermistorNxpKTY84.voltsToTemp(latestValues[i], 5, 1000) #measuredV, supplyV, pullupR
             elif i == 8 or i == 9:
                 #Returns T in Celsius
                 self.convertedValues[i] = thermistorOmega44004.voltsToTemp(latestValues[i], 5, 100) #measuredV, supplyV, pullupR
@@ -216,14 +216,14 @@ class ConvertLogGraph(threading.Thread):
 def main():
     """==========User Input Begin=========="""
     #Define acquisition parameters
-    channelNameList = ["""T Motor 1""","""T Motor 2""","""T Surface 1""","""T Surface 2""","""T Surface 3""","""T Stator steel body 1""","""T Stator steel body 2""","""T Stator steel body 3""","""T coolant motor inlet""","""T coolant motor outlet""","""P coolant motor inlet""","""T coolant post U-jacket 1""","""T coolant post U-jacket 2""","""T ambient""","""T Stator copper end-turn 1""","""T Stator copper end-turn 2""","""T Stator copper end-turn 3""","""T Stator copper end-turn 4""","""T Stator copper end-turn 5""","""T Stator copper end-turn 6""","""T Stator copper mid-stack 1""","""T Stator copper mid-stack 2""","""T Stator copper mid-stack 3""","""T Stator copper mid-stack 4""","""T Stator steel weld line 1""","""T Stator steel weld line 2""","""T Stator steel weld line 3""","""Cold Junction Temp""","""Coolant flow rate"""]
-    channelList = [48,120,49,50,51,52,53,54,121,122,123,55,80,81,82,83,84,85,86,87,96,97,98,99,100,101,102,14,None]
+    channelNameList = ["""T Motor 1""","""T Motor 2""","""T Surface 1""","""T Surface 2""","""T Surface 3""","""T Stator steel body 1""","""T Stator steel body 2""","""T Stator steel body 3""","""T coolant motor inlet""","""T coolant motor outlet""","""P coolant motor inlet""","""T coolant post U-jacket 1""","""T coolant post U-jacket 2""","""T ambient""","""T Stator copper end-turn 1""","""T Stator copper end-turn 2""","""T Stator copper end-turn 3""","""T Stator copper end-turn 4""","""T Stator copper end-turn 5""","""T Stator copper end-turn 6""","""T Stator copper mid-stack 1""","""T Stator copper mid-stack 2""","""T Stator copper mid-stack 3""","""T Stator copper mid-stack 4""","""T Stator steel weld line 1""","""T Stator steel weld line 2""","""T Stator steel weld line 3""","""Cold Junction Temp""","""5V Ref""","""Coolant flow rate"""]
+    channelList = [48,120,49,50,51,52,53,54,121,122,123,55,80,81,82,83,84,85,86,87,96,97,98,99,100,101,102,14,124,None]
     resolutionIndexList = [1]*len(channelList)
-    gainIndexList = [0,0,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,None]
+    gainIndexList = [0,0,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,0,None]
     settlingFactor = 0
-    differentialList = [True,False,True,True,True,True,True,True,False,False,False,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,False,False]
-    thermocoupleList = [False,False,True,True,True,True,True,True,False,False,False,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,False,False]
-    digitalList = [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,True]
+    differentialList = [True,False,True,True,True,True,True,True,False,False,False,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,False,False,False]
+    thermocoupleList = [False,False,True,True,True,True,True,True,False,False,False,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,True,False,False,False]
+    digitalList = [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,False,True]
     scanFrequency = 10
 
     #Find calibration constants for LJ, will be used for CJC temperature calculation
