@@ -185,6 +185,8 @@ class ConvertLogGraph(threading.Thread):
                     self.ljCJCchannelListIndex = i
                     self.cjcExists = True
                     break
+
+            self.ref_5V = 5 #Set thermistor reference voltage
         
         if self.cjcExists:
             ljCJCTempK = latestValues[self.ljCJCchannelListIndex]*self.ljCJCTempSlope + self.ljCJCTempOffset
@@ -201,10 +203,13 @@ class ConvertLogGraph(threading.Thread):
                 self.convertedValues[i] = ljCJCTempC
             elif i == 0 or i ==1:
                 #Returns T in Celsius
-                self.convertedValues[i] = thermistorNxpKTY84.voltsToTemp(latestValues[i], 5, 1000) #measuredV, supplyV, pullupR
+                self.convertedValues[i] = thermistorNxpKTY84.voltsToTemp(latestValues[i], self.ref_5V, 1000) #measuredV, supplyV, pullupR
             elif i == 8 or i == 9:
                 #Returns T in Celsius
-                self.convertedValues[i] = thermistorOmega44004.voltsToTemp(latestValues[i], 5, 100) #measuredV, supplyV, pullupR
+                self.convertedValues[i] = thermistorOmega44004.voltsToTemp(latestValues[i], self.ref_5V, 1000) #measuredV, supplyV, pullupR
+            elif i == 28:
+                self.ref_5V = latestValues[i]
+                self.convertedValues[i] = latestValues[i]
             elif self.listOfMeasurements[i].isDigital():
                 self.convertedValues[i] = 0 if latestValues[i] == 0 else float(48e6)/latestValues[i] #returns Hz from flowmeter
             else: 
