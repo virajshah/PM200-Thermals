@@ -79,7 +79,7 @@ class LabJackIO(threading.Thread):
         for measurement in self.listOfMeasurements:
             if measurement.isDigital():
                 d.configIO( NumberTimersEnabled = 1 )
-                d.configTimerClock( TimerClockBase = 2) #48 MHz
+                d.configTimerClock( TimerClockBase = 3, TimerClockDivisor = 1) #1 MHz
                 d.getFeedback(u6.Timer0Config(TimerMode = 2, Value = 0)) #Set the Timer mode to 2. 32-bit rising edge Timer. 
 
         #Create Feedback Argument List
@@ -211,7 +211,7 @@ class ConvertLogGraph(threading.Thread):
                 self.ref_5V = latestValues[i]
                 self.convertedValues[i] = latestValues[i]
             elif self.listOfMeasurements[i].isDigital():
-                self.convertedValues[i] = 0 if latestValues[i] == 0 else float(48e6)/latestValues[i] #returns Hz from flowmeter
+                self.convertedValues[i] = 0 if latestValues[i] == 0 else float(1e6)/latestValues[i] #returns Hz from flowmeter
             else: 
                 self.convertedValues[i] = latestValues[i]
         
