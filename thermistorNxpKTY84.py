@@ -7,7 +7,7 @@ Resistance_LookUp_Ohms = (359,391,424,460,498,538,581,626,672,722,773,826,882,94
 Temperature_LookUp_C = (-40,-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200) 
 
 def voltsToTemp(measuredV, supplyV, pullupR):
-	thermistorR = pullupR/((float(supplyV)/measuredV) - 1) #Voltage divider formula
+	thermistorR = 0 if supplyV == 0 or measuredV == 0 else pullupR/((float(supplyV)/measuredV) - 1) #Voltage divider formula
 	indexForInterp = 0
 	for i in range(len(Resistance_LookUp_Ohms)):
 		if thermistorR <= Resistance_LookUp_Ohms[i]:
