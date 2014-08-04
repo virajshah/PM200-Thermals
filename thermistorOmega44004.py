@@ -12,7 +12,7 @@ def voltsToTemp(measuredV, supplyV, pullupR):
 	B = 2.383E-4
 	C = 1.007E-7
 
-	thermistorR = pullupR/((float(supplyV)/measuredV) - 1) #Voltage divider formula
+	thermistorR = 0 if measuredV == 0 or supplyV == 0 else pullupR/((float(supplyV)/measuredV) - 1) #Voltage divider formula
 	try:
 		inverseT = A + B*log(thermistorR) + C*(log(thermistorR)**3)
 	except:
