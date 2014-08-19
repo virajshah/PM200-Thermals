@@ -1,8 +1,7 @@
 import u6
-from datetime import datetime
 import threading
 import traceback
-from time import sleep, time
+from time import sleep, time, strftime
 import Queue
 import csv
 import tTypeThermocouple
@@ -146,7 +145,8 @@ class ConvertLogGraph(threading.Thread):
         channelNamesList = ["Timestamp"]
         for measurement in self.listOfMeasurements:
             channelNamesList.append(measurement.GET("name"))
-        with open('test.csv','ab') as f:
+        self.filename = 'PM200_Thermal_Characterization ' + strftime("%d-%m-%Y-%H%M%S") + ".csv" 
+        with open(self.filename,'ab') as f:
                 wr = csv.writer(f)
                 wr.writerow(channelNamesList)
 
@@ -166,7 +166,7 @@ class ConvertLogGraph(threading.Thread):
             timestamp = (1.0/self.scanFrequency)*self.timeCounter 
 
             #Log temperature data into a CSV file
-            with open('test.csv','ab') as f:
+            with open(self.filename,'ab') as f:
                 wr = csv.writer(f)
                 wr.writerow([timestamp]+latestConvertedValues)
 
