@@ -207,6 +207,9 @@ class ConvertLogGraph(threading.Thread):
             elif i == 8 or i == 9:
                 #Returns T in Celsius
                 self.convertedValues[i] = thermistorOmega44004.voltsToTemp(latestValues[i], self.ref_5V, 1000) #measuredV, supplyV, pullupR
+            elif i == 10: 
+                #Returns P in psig
+                self.convertedValues[i] = 1.25*latestValues[i] - 0.625 #Pressure sensor is 0 to 5psig, 0.5V to 4.5V
             elif i == 28:
                 self.ref_5V = latestValues[i]
                 self.convertedValues[i] = latestValues[i]
