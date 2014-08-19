@@ -78,7 +78,7 @@ def voltsToTempCoeffs(mVolts):
     into temperature in Celsius.
     """
     if mVolts < -5.603 or mVolts > 20.872:
-        print "Voltage outside range."
+        pass
     if mVolts < 0:
         return voltsToTempCoefficients1 
     else: 
@@ -91,7 +91,7 @@ def tempToVoltsCoeffs(tempC):
     into voltage in millivolts.
     """
     if tempC < -270 or tempC > 400:
-        print "Temperature outside range."
+        pass
     if tempC < 0:
         return tempToVoltsCoefficients1
     else:
