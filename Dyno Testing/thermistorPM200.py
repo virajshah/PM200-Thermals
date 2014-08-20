@@ -11,12 +11,11 @@ def voltsToTemp(measuredV, supplyV, pullupR):
 		thermistorR = 0 if (measuredV == 0 or supplyV == 0 or measuredV == supplyV) else pullupR/((float(supplyV)/measuredV) - 1) #Voltage divider formula
 		indexForInterp = 0
 		for i in range(len(Resistance_LookUp_Ohms)):
-			if thermistorR <= Resistance_LookUp_Ohms[i]:
-				indexForInterp = i -1
-				r_pt1 = Resistance_LookUp_Ohms[indexForInterp]
-				r_pt2 = Resistance_LookUp_Ohms[indexForInterp+1]
-				temp_pt1 = Temperature_LookUp_C[indexForInterp]
-				temp_pt2 = Temperature_LookUp_C[indexForInterp + 1]
+			if thermistorR >= Resistance_LookUp_Ohms[i]:
+				r_pt1 = Resistance_LookUp_Ohms[i-1]
+				r_pt2 = Resistance_LookUp_Ohms[i]
+				temp_pt1 = Temperature_LookUp_C[i-1]
+				temp_pt2 = Temperature_LookUp_C[i]
 				m = (temp_pt2 - temp_pt1)/float((r_pt2 - r_pt1))
 				b = temp_pt1 - (m*r_pt1)
 				return (m*thermistorR) + b
