@@ -5,7 +5,7 @@ from time import sleep, time, strftime
 import Queue
 import csv
 import tTypeThermocouple
-import thermistorNxpKTY84
+import thermistorPM200
 import thermistorOmega44004
 
 """
@@ -201,9 +201,11 @@ class ConvertLogGraph(threading.Thread):
             elif i == self.ljCJCchannelListIndex:
                 #Returns T in Celsius
                 self.convertedValues[i] = ljCJCTempC
-            elif i == 0 or i ==1:
+            elif i == 0:
                 #Returns T in Celsius
-                self.convertedValues[i] = thermistorNxpKTY84.voltsToTemp(latestValues[i], self.ref_5V, 1000) #measuredV, supplyV, pullupR
+                self.convertedValues[i] = thermistorPM200.voltsToTemp(latestValues[i], 5, 1000) #measuredV, supplyV, pullupR
+            elif i == 1:
+            	self.convertedValues[i] = thermistorPM200.voltsToTemp(latestValues[i], self.ref_5V, 1000)
             elif i == 8 or i == 9:
                 #Returns T in Celsius
                 self.convertedValues[i] = thermistorOmega44004.voltsToTemp(latestValues[i], self.ref_5V, 1000) #measuredV, supplyV, pullupR
