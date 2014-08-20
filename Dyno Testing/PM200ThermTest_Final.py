@@ -216,7 +216,8 @@ class ConvertLogGraph(threading.Thread):
                 self.ref_5V = latestValues[i]
                 self.convertedValues[i] = latestValues[i]
             elif self.listOfMeasurements[i].isDigital():
-                self.convertedValues[i] = 0 if latestValues[i] == 0 else float(1e6)/latestValues[i] #returns Hz from flowmeter
+            	frequency = 0 if latestValues[i] == 0 else float(1e6)/latestValues[i] #returns Hz from flowmeter
+                self.convertedValues[i] = 0.0370*frequency
             else: 
                 self.convertedValues[i] = latestValues[i]
         
