@@ -184,20 +184,13 @@ class ConvertLogGraph(threading.Thread):
                 if self.listOfMeasurements[i].GET("channel") == 14:
                     self.ljCJCchannelListIndex = i
                     self.cjcExists = True
-                    self.latestCJCTempC = 23 
                     break
 
             self.ref_5V = 5 #Set thermistor reference voltage
         
-        #Gets the CJC signal and converts that based on calibration data. If CJC is out of normal range
-        #we ignore it and use the last known CJC value.  
         if self.cjcExists:
             ljCJCTempK = latestValues[self.ljCJCchannelListIndex]*self.ljCJCTempSlope + self.ljCJCTempOffset
             ljCJCTempC = ljCJCTempK + 2.5 - 273.15 #add 2.5 since screw terminals on CB37 are 2.5C above ambient with enclosure
-            if ljCJCTempC < 15 or ljCJCTempC > 40:
-            	ljCJCTempC = self.latestCJCTempC
-            else:
-            	self.latestCJCTempC = ljCJCTempC
 
         #If value is a thermocouple, send to T-type library to get converted to temperature, 
         #if CJC return value calculated above otherwise leave alone. 
